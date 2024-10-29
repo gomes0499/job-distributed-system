@@ -1,27 +1,23 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from './prisma/prisma.module';
+
+import { ConfigModule } from '@nestjs/config';
+import { JobsModule } from './jobs/jobs.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     ConfigModule,
-    PrismaModule,
-    UsersModule,
+    JobsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      autoSchemaFile: true,
       playground: {
         settings: {
           'request.credentials': 'include',
         },
       },
-      context: ({ req, res }) => ({ req, res }),
-      autoSchemaFile: true,
     }),
   ],
-
-  controllers: [],
 })
 export class AppModule {}
